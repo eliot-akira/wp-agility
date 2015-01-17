@@ -1,0 +1,17 @@
+# Agility
+
+# -- Always ignore --
+
+node_modules
+npm-debug.log
+_unused
+
+.DS_Store
+.svn
+.cvs
+.gitmodules
+.htaccess
+.tweetcache
+*.bak
+*.swp
+Thumbs.db

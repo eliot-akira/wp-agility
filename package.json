@@ -1,0 +1,40 @@
+{
+  "name": "Ajaxio",
+  "version": "1.0.0",
+  "description": "AJAX client/server interface",
+  "dependencies": {},
+  "devDependencies": {
+    "browserify": "^7.0.3",
+    "browserify-shim": "^3.8.1",
+    "gulp": ">=3.0",
+    "gulp-bytediff": ">=0.0",
+    "gulp-cache": ">=0.0",
+    "gulp-concat": ">=2.0",
+    "gulp-ignore": ">=1.0",
+    "gulp-jshint": ">=1.0",
+    "gulp-load-plugins": "^0.8.0",
+    "gulp-minify-css": "^0.3.11",
+    "gulp-rename": ">=0.0",
+    "gulp-sourcemaps": ">=1.0",
+    "gulp-uglify": ">=0.0",
+    "gulp-util": "^3.0.1",
+    "gulp-watch": ">=2.0",
+    "mold-source-map": "^0.3.0",
+    "require-dir": ">=0.1",
+    "rimraf": ">=2.0",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.0.0",
+    "watchify": "^2.2.1"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browserify-shim": {
+    "jquery": "global:jQuery",
+    "backbone": "global:Backbone",
+    "underscore": "global:_",
+    "ajaxio": "global:ajaxio"
+  }
+}
