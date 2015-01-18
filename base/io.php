@@ -10,12 +10,12 @@
 class Agility_IO {
 
 
-	public static function input() {
+	public static function request() {
 
 		$nonce = isset($_POST['nonce']) ? $_POST['nonce'] : null;
 
 		if ( !wp_verify_nonce( $nonce, 'agility' ) )
-			self::json_error( 'Invalid nonce' );
+			self::error_message( 'Invalid nonce' );
 		    // die('Unauthorized'); // Unauthorized request
 
 		// Unescape data
@@ -36,19 +36,34 @@ class Agility_IO {
 	}
 
 
-	public static function json_success( $content ) {
-
-		wp_send_json_success( $content );
-		// echo json_encode( $content );
-		// exit;
+	public static function success( $data ) {
+		wp_send_json_success( $data );
 	}
 
+	public static function error( $response ) {
+		// status_header( 412 );
+		wp_send_json_error( $response );
+	}
 
-	private static function json_error( $message ) {
-		status_header( 412 );
+	public static function error_message( $message ) {
 		wp_send_json_error( array( 'message' => $message ) );
 	}
 
+	public static function respond( $response ) {
+
+		if ($response['success']) {
+			self::success($response['data']);
+		} else {
+			self::error( $response );
+		}
+
+	}
+
+
+	public static function output( $content ) {
+		echo json_encode( $content );
+		exit;
+	}
 
 
 	public static function get_action() {

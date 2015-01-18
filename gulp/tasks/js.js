@@ -97,7 +97,7 @@ function runMinifyJS( slug, src, dest, files, dev ) {
 
 
   // --- Init source maps if dev mode ---
-  if (dev) bundle = bundle.pipe( plugins.sourcemaps.init({ loadMaps: true }) );
+//  if (dev) bundle = bundle.pipe( plugins.sourcemaps.init({ loadMaps: true }) );
 
 
   bundle = bundle.pipe( plugins.concat('combined.js') )
@@ -107,7 +107,7 @@ function runMinifyJS( slug, src, dest, files, dev ) {
 
 
   // --- Write source maps if dev mode ---
-  if (dev) bundle = bundle.pipe( plugins.sourcemaps.write() );
+//  if (dev) bundle = bundle.pipe( plugins.sourcemaps.write() );
 
 
   bundle = bundle

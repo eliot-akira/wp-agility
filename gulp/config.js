@@ -9,15 +9,8 @@ config.ignoreFiles = '!{**/_*,**/_*/**}'; // Exclude everything starting with _
 
 assets = [
   {
-    slug : 'ajaxio',
-    folder : './base/assets/',
-    css : false,
-    js : true
-  },
-  {
-    slug : 'ajaxio-form',
-    folder : './extensions/form/assets/',
-    css : true,
+    slug : 'agility',
+    folder : './',
     js : true
   }
 ];
@@ -65,3 +58,4 @@ assets.forEach(function( asset ){
 });
 
 module.exports = config;
+

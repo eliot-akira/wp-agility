@@ -21,10 +21,10 @@ class Agility_Enqueue {
 		self::$state['version'] = '0.0.1';
 		self::$state['js'] = 'js/agility.min.js';
 
-		self::$state['url'] = dirname( dirname(__FILE__) ); // ../
+		self::$state['url'] = dirname( dirname(__FILE__) ) . '/'; // One folder above
 		self::$state['url'] = str_replace( WP_CONTENT_DIR, WP_CONTENT_URL, self::$state['url'] );
 
-		add_action( 'wp_head', array($this, 'prepare_wp_current') );
+		add_action( 'wp_head', array($this, 'prepare_wp_js') );
         add_action( 'wp_enqueue_scripts', array( $this, 'include_scripts' ) );
 	}
 
@@ -35,26 +35,38 @@ class Agility_Enqueue {
 	}
 
 
-	function prepare_wp_current() {
+	function prepare_wp_js() {
 
-		global $wp;
-
-		$route = self::prepare_route_array();
+		$routes = self::prepare_routes_array();
 
 		$user = self::prepare_user_array();
 
-		$data = array(
-			'route' => $route,
+		$current = array(
 			'user' => $user,
 			'nonce' => wp_create_nonce( 'agility' ),
+			'queries' => $routes['route']['queries'],
+			'request' => $routes['route']['request'],
+			'requests' => $routes['route']['requests'],
+			'url' => $routes['route']['current'],
 		);
 
-		$data = stripslashes(json_encode($data));
+		$current = self::prepare_json( $current );
+		$url = self::prepare_json( $routes['url'] );
 
 		// Pass it to client-side JS as wp.current
 
-		?><script>window.wp=window.wp||{};wp.current=<?php echo $data(); ?>;</script><?php
+?><script>
+window.wp=window.wp||{};
+wp.current=<?php echo $current; ?>;
+wp.url=<?php echo $url; ?>;
+</script><?php
 
+	}
+
+
+	static function prepare_json( $data ) {
+		// Why decode..?
+		return html_entity_decode(stripslashes(json_encode($data)));
 	}
 
 	/*---------------------------------------------
@@ -63,7 +75,9 @@ class Agility_Enqueue {
 	 *
 	 */
 
-	static function prepare_route_array() {
+	static function prepare_routes_array() {
+
+		global $wp;
 
 		// Get URL request
 
@@ -80,23 +94,24 @@ class Agility_Enqueue {
 		$url = parse_url( $request_url );
 		$query_string = isset($url['query']) ? $url['query'] : null;
 		parse_str( $query_string, $query_array ); // Create array from query string
-		$query_array = array_filter($query_array); // Remove any empty keys
+		$query_array = array_filter($query_array); // Remove empty keys
 
 		return array(
-				'ajax'    => admin_url('admin-ajax.php'),
-				'home'    => home_url(),
-				'query'   => array(
-					'string'  => $query_string,
-					'array'   => $query_array,
+				'url' => array(
+					'ajax'    => admin_url('admin-ajax.php'),
+					'home'    => trailingslashit(home_url()),
+					'logout'  => wp_logout_url(),
+					'site'    => trailingslashit(site_url()),
 				),
-				'request' => array(
-					'url'     => $request_url,
-					'string'  => $request_string,
-					'array'   => $request_array,
-					'slug'    => array_pop($request_array),
-				),
-				'site'    => site_url(),
-				'vars'    => $wp->query_vars
+				'route' => array(
+					'current' => $request_url,
+					'query'    => $query_string,
+					'queries'  => $query_array,
+					'request'  => $request_string,
+					'requests' => $request_array,
+					'slug'     => array_pop($request_array),
+					'vars'     => $wp->query_vars
+				)
 		);
 	}
 
@@ -111,13 +126,15 @@ class Agility_Enqueue {
 
 		// User data		
 		$user = wp_get_current_user();
-		$user_data = array( 'id' => 0 ); // Default: not logged in
 
-		if ( $user ) {
+		if ( 0 == $user->ID || !is_user_logged_in() ) {
+			$user_data = array( 'id' => 0, 'login' => false ); // Default: not logged in
+		} else  {
 			$user_data = array(
 				'id' => $user->ID,
 				'name' => $user->user_login,
-				'display_name' => $user->display_name
+				'display_name' => $user->display_name,
+				'login' => true
 			);
 		}
 		return $user_data;

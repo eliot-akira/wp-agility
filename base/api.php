@@ -3,9 +3,8 @@
 include('enqueue.php');
 include('io.php');
 include('register.php');
-// include('util/encrypt.php');
 include('util/log.php');
-
+// include('util/encrypt.php');
 
 // Public API
 
@@ -18,12 +17,24 @@ class Agility {
 		return Agility_Register::register( $actions );
 	}
 
-	public static function input() {
-		return Agility_IO::input();
+	public static function request() {
+		return Agility_IO::request();
 	}
 
-	public static function output( $content ) {
-		return Agility_IO::output( $content );
+	public static function success( $content = array() ) {
+		return Agility_IO::success( $content );
+	}
+
+	public static function error( $content = array() ) {
+		return Agility_IO::error( $content );
+	}
+
+	public static function error_message( $message = '' ) {
+		return Agility_IO::error_message( $message );
+	}
+
+	public static function respond( $response = array() ) {
+		return Agility_IO::respond( $response );
 	}
 
 	public static function get_action() {

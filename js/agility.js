@@ -1,10 +1,17 @@
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+
+window.$$ = require('./agility.js');
+window.wp = window.wp || {};
+window.wp.action = require('./wp-action.js');
+
+},{"./agility.js":2,"./wp-action.js":3}],2:[function(require,module,exports){
 /**
  * 
- * Agility.js - extended and customized
+ * Agility.js
  * 
  * - AMD/CommonJS module or global $$
  * - Merged pull requests
- * - Additional features
+ * - Extended and customized
  * 
  * Based on Agility.js 0.1.3 by Artur B. Adib - http://agilityjs.com
  * 
@@ -1431,3 +1438,263 @@
 */
 
 })(window);
+
+},{}],3:[function(require,module,exports){
+(function (global){
+
+/*---------------------------------------------
+ *
+ * wp.action
+ * 
+ * - get, save
+ * - login, logout, go, reload
+ *
+ */
+
+var $ = (typeof window !== "undefined" ? window.jQuery : typeof global !== "undefined" ? global.jQuery : null),
+    wpAjax = require('./wp-ajax.js');
+
+module.exports = $.extend( window.wp.action || {}, {
+
+  /**
+   *
+   * get( [type,] { query } )
+   * 
+   * @param {string} type   Content type: posts, users
+   * @param {object} query  Query arguments
+   * 
+   * @todo taxonomy, comments
+   *
+   */
+
+  get : function() {
+
+    var type = 'posts'; // Default
+
+    // Create array of arguments
+    var args = Array.prototype.slice.call(arguments, 0);
+
+    if ( args.length === 0 )
+      return wpAjax( 'fail' );
+
+    if ( typeof args[0] === 'string' ) {
+      type = args[0];
+      args.shift();
+    }
+
+    request = args[0] || {};
+    success = args[1] || {};
+    error = args[2] || {};
+
+    if ( typeof request.type !== 'undefined' ) {
+      type = request.type;
+      delete request.type;
+    }
+
+    return wpAjax( 'get_'+type, request, success, error );
+  },
+
+
+  /**
+   *
+   * save( [type,] { data } )
+   * 
+   * @param {string} type   Content type: post, user
+   * @param {object} data   Data
+   * 
+   * @todo taxonomy, comments..
+   *
+   */
+
+  save: function() {
+
+    var type = 'post'; // Default
+
+    // Create array of arguments
+    var args = Array.prototype.slice.call(arguments, 0);
+
+    if ( args.length === 0 )
+      return wpAjax( 'fail' );
+
+    if ( typeof args[0] === 'string' ) {
+      type = args[0];
+      args.shift();
+    }
+
+    request = args[0] || {};
+    success = args[1] || {};
+    error = args[2] || {};
+
+    if ( typeof request.type !== 'undefined' ) {
+      type = request.type;
+      delete request.type;
+    }
+
+    return wpAjax( 'save_'+type, request, success, error );
+  },
+
+
+  /**
+   *
+   * login, logout, go, reload
+   *
+   * @todo register
+   *
+   */
+
+
+  login : function( request, success, error ) {
+
+    return wpAjax( 'login', request, success, error );
+  },
+
+  logout : function( redirect ) {
+
+    var logout = wp.url.logout;
+
+    if ( typeof redirect === 'undefined' ) redirect = wp.current.request;
+
+    logout += '&redirect_to='+wp.url.site+redirect;
+    location.href = logout;
+  },
+
+  go : function( route ) {
+    location.href = wp.url.site+route;
+  },
+
+  reload : function() {
+    location.href = wp.current.url;
+  }
+
+});
+
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./wp-ajax.js":4}],4:[function(require,module,exports){
+(function (global){
+/* global wp.current.nonce, wp.url.ajax */
+
+var $ = (typeof window !== "undefined" ? window.jQuery : typeof global !== "undefined" ? global.jQuery : null);
+
+function wpAjax( action, request, success, error ) {
+
+  var req = {
+    type: 'POST',
+    url: wp.url.ajax, // AJAX URL from server-side
+    data: {
+      action: 'agility_'+action, // Prefix
+      nonce: wp.current.nonce, // Nonce from server-side
+      data: request // The real data
+    },
+    beforeSend: '',
+    success: '',
+    error: ''
+  };
+
+  // Based on wp-util.js
+  return $.Deferred( function( deferred ) {
+
+    // Transfer success/error callbacks.
+    if ( success )
+      deferred.done( success );
+    if ( error )
+      deferred.fail( error );
+
+    // Option to force return fail before Ajax request
+    if ( action === 'fail' )
+      deferred.rejectWith( this, arguments );
+
+    // Use with PHP's wp_send_json_success() and wp_send_json_error()
+    $.ajax( req ).done( function( response ) {
+
+      // Treat a response of `1` as successful for backwards compatibility
+      if ( response === '1' || response === 1 )
+        response = { success: true };
+
+      if ( typeof response.data === 'undefined' )
+        response.data = 'empty';
+
+      if ( typeof response === 'object' && ( typeof response.success !== 'undefined' ) )
+        deferred[ response.success ? 'resolveWith' : 'rejectWith' ]( this, [response.data] );
+      else{
+        deferred.rejectWith( this, arguments ); // [response.data]
+      }
+    }).fail( function() {
+      deferred.rejectWith( this, arguments );
+    });
+  }).promise();
+
+}
+
+module.exports = wpAjax;
+
+
+/**
+ * Shim for "fixing" IE's lack of support (IE < 9) for applying slice
+ * on host objects like NamedNodeMap, NodeList, and HTMLCollection
+ * (technically, since host objects have been implementation-dependent,
+ * at least before ES6, IE hasn't needed to work this way).
+ * Also works on strings, fixes IE < 9 to allow an explicit undefined
+ * for the 2nd argument (as in Firefox), and prevents errors when
+ * called on other DOM objects.
+
+(function () {
+  'use strict';
+  var _slice = Array.prototype.slice;
+
+  try {
+    // Can't be used with DOM elements in IE < 9
+    _slice.call(document.documentElement);
+  } catch (e) { // Fails in IE < 9
+    // This will work for genuine arrays, array-like objects, 
+    // NamedNodeMap (attributes, entities, notations),
+    // NodeList (e.g., getElementsByTagName), HTMLCollection (e.g., childNodes),
+    // and will not fail on other DOM objects (as do DOM elements in IE < 9)
+    Array.prototype.slice = function(begin, end) {
+      // IE < 9 gets unhappy with an undefined end argument
+      end = (typeof end !== 'undefined') ? end : this.length;
+
+      // For native Array objects, we use the native slice function
+      if (Object.prototype.toString.call(this) === '[object Array]'){
+        return _slice.call(this, begin, end); 
+      }
+
+      // For array like object we handle it ourselves.
+      var i, cloned = [],
+        size, len = this.length;
+
+      // Handle negative value for "begin"
+      var start = begin || 0;
+      start = (start >= 0) ? start: len + start;
+
+      // Handle negative value for "end"
+      var upTo = (end) ? end : len;
+      if (end < 0) {
+        upTo = len + end;
+      }
+
+      // Actual expected size of the slice
+      size = upTo - start;
+
+      if (size > 0) {
+        cloned = new Array(size);
+        if (this.charAt) {
+          for (i = 0; i < size; i++) {
+            cloned[i] = this.charAt(start + i);
+          }
+        } else {
+          for (i = 0; i < size; i++) {
+            cloned[i] = this[start + i];
+          }
+        }
+      }
+
+      return cloned;
+    };
+  }
+}());
+ */
+
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}]},{},[1]);
