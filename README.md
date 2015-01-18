@@ -44,12 +44,10 @@ var usersList = $$({
   view: '<ul>',
   events: {
     'parent:append' : function() {
-      usersList.$view.hide();
       wp.action
         .get({ type: 'users', orderby: 'id' })
         .done( function(users) {
           usersList.loadModels( singleUser, users );
-          usersList.$view.fadeIn('slow');
         });
     }
   }
@@ -58,7 +56,7 @@ var usersList = $$({
 app.append( usersList );
 ```
 
-When this object is appended to the main container, it will load a list of users from the server and fade in.
+When this object is appended to the main container, it will load a list of users from the server.
 
 ## Action
 
