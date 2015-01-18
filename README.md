@@ -26,7 +26,7 @@ var usersList = $$({
       wp.action
         .get({ type: 'users', orderby: 'id' })
         .done( function(users) {
-          sersList.loadModels( singleUser, users, 'tbody' );
+          usersList.loadModels( singleUser, users, 'tbody' );
           usersList.$view.fadeIn('slow');
         });
     }
