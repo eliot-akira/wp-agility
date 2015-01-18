@@ -1,18 +1,45 @@
 # WP-Agility
 
-Based on [Agility.js](http://agilityjs.com)
+## Basic
 
-## Object
+The core feature is based on [Agility.js](http://agilityjs.com).
 
-Objects encapsulate model/view/events.
+Objects are created by the factory function $$.  They encapsulate model/view/events, and can be used as a prototype to create other objects.
+
+#### Container object
 
 ```
 var app = $$();
 
 $$.document.append(app);
+```
 
+## Model/view binding syntax
+
+View must have one root element.
+
+```
+var singleUser = $$('<li><span data-bind="name"/> - <span data-bind="email"/></li>');
+```
+
+#### From template
+
+```
 var singleUser = $$('#tmpl-single-user');
+```
 
+#### Inherit from prototype
+
+```
+var userOne = $$(singleUser, { name: 'Me', email: 'me@example.com'});
+var userTwo = $$(singleUser, { name: 'You', email: 'you@example.com'});
+```
+
+#### Create collection
+
+When this object is appended to the container, it will load a list of users from the server and fade in.
+
+```
 var usersList = $$({
   model: {
     id : '',
@@ -34,12 +61,6 @@ var usersList = $$({
 });
 
 app.append( usersList );
-```
-
-## Model/view binding
-
-```
-<input type="text" data-bind="username">
 ```
 
 ## Action
