@@ -41,12 +41,7 @@ A collection is just an object that contains child objects.
 
 ```
 var usersList = $$({
-  model: {
-    id : '',
-    name : '',
-    email : ''
-  },
-  view: '#tmpl-user-list',
+  view: '<ul>',
   events: {
     'parent:append' : function() {
       usersList.$view.hide();
