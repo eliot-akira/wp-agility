@@ -53,7 +53,7 @@ var usersList = $$({
       wp.action
         .get({ type: 'users', orderby: 'id' })
         .done( function(users) {
-          usersList.loadModels( singleUser, users, 'tbody' );
+          usersList.loadModels( singleUser, users );
           usersList.$view.fadeIn('slow');
         });
     }
@@ -70,6 +70,10 @@ When this object is appended to the main container, it will load a list of users
 Get and save data from WordPress backend.
 
 ```
+var postList = $$('<ul>');
+
+var singlePostClass = $$('<li data-bind="title">');
+
 wp.action
   .get({
     post_type : 'post',
@@ -78,7 +82,7 @@ wp.action
   .done( function( posts ) {
     $.each(posts, function(post){
       var singlePost = $$( singlePostClass, post );
-      postList.append( singlePost, 'tbody' );
+      postList.append( singlePost );
     });
   });
 ```
