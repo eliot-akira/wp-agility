@@ -46,7 +46,7 @@ var usersList = $$({
     name : '',
     email : ''
   },
-  view: '#tmpl-single-user',
+  view: '#tmpl-user-list',
   events: {
     'parent:append' : function() {
       usersList.$view.hide();
