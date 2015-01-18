@@ -1,6 +1,6 @@
 <?php  
 
-class Ajaxio_Encrypt {
+class Agility_Encrypt {
 
 	public static function generate_key() {
 		return str_shuffle('0123456789');

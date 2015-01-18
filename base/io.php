@@ -1,8 +1,8 @@
 <?php 
 
-/**
- * 
- * Ajaxio: input/output
+/*---------------------------------------------
+ *
+ * Agility: Input/Output
  *
  */
 

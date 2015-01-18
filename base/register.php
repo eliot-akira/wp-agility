@@ -1,5 +1,11 @@
 <?php 
 
+/*---------------------------------------------
+ *
+ * Agility: Register actions
+ *
+ */
+
 class Agility_Register {
 
 	public static function register( $actions ) {
