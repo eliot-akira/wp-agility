@@ -9,6 +9,7 @@
 
 class Agility_IO {
 
+
 	public static function request() {
 
 		$nonce = isset($_POST['nonce']) ? $_POST['nonce'] : null;
@@ -51,10 +52,11 @@ class Agility_IO {
 	public static function respond( $response ) {
 
 		if ($response['success']) {
-			self::success( isset($response['data']) ? $response['data'] : '' );
+			self::success($response['data']);
 		} else {
 			self::error( $response );
 		}
+
 	}
 
 

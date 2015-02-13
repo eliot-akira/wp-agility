@@ -2,11 +2,10 @@
 
 /**
  *
- * Agility: login & register
+ * Agility: login
  *
  * @param username
  * @param password
- * @param email 	For register
  *
  */
 

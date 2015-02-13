@@ -6,7 +6,7 @@
  * 
  * - Load bundled JS
  * - Store site config in wp.current
- *   current URL request, admin-ajax URL, nonce, user
+ *   Current URL request, admin-ajax URL, nonce, user
  * 
  */
 
@@ -18,17 +18,17 @@ class Agility_Enqueue {
 
 	function __construct( $url = null ) {
 
+		self::$state['version'] = '0.0.1';
+		self::$state['js'] = 'js/agility.min.js';
+
+		self::$state['url'] = dirname( dirname(__FILE__) ) . '/'; // One folder above
+		self::$state['url'] = str_replace( WP_CONTENT_DIR, WP_CONTENT_URL, self::$state['url'] );
+
 		add_action( 'wp_head', array($this, 'prepare_wp_js') );
         add_action( 'wp_enqueue_scripts', array( $this, 'include_scripts' ) );
 	}
 
 	function include_scripts() {
-
-		self::$state['version'] = '0.2.2';
-		self::$state['js'] = 'assets/js/wp-agility.min.js';
-
-		self::$state['url'] = trailingslashit( dirname(dirname(__FILE__)) ); // One folder above
-		self::$state['url'] = str_replace( WP_CONTENT_DIR, WP_CONTENT_URL, self::$state['url'] );
 
 		wp_enqueue_script( 'agility', self::$state['url'].self::$state['js'],
 			array('jquery'), self::$state['version'], true );
@@ -48,7 +48,6 @@ class Agility_Enqueue {
 			'request' => $routes['route']['request'],
 			'requests' => $routes['route']['requests'],
 			'url' => $routes['route']['current'],
-			'sitename' => get_option('blogname')
 		);
 
 		$current = self::prepare_json( $current );
@@ -57,8 +56,9 @@ class Agility_Enqueue {
 		// Pass it to client-side JS as wp.current
 
 ?><script>
-window.wp=window.wp||{};window.$=window.jQuery;
-wp.current=<?php echo $current; ?>; wp.url=<?php echo $url; ?>;
+window.wp=window.wp||{};
+wp.current=<?php echo $current; ?>;
+wp.url=<?php echo $url; ?>;
 </script><?php
 
 	}

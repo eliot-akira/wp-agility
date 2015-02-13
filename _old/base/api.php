@@ -17,8 +17,6 @@ class Agility {
 		return Agility_Register::register( $actions );
 	}
 
-	// @todo Simplify!
-
 	public static function request() {
 		return Agility_IO::request();
 	}

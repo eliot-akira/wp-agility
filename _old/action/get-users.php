@@ -4,13 +4,16 @@
  *
  * Agility: get_user, get_users
  *
- * @param All parameters for get_users
- * @see codex.wordpress.org/Function_Reference/get_users
+ * @param All parameters for WP_Query
+ * @see codex.wordpress.org/Class_Reference/WP_Query
  * 
  * @return Array
  * 
- *         success		true/false
+ *         post 	 	Post object - get_post
+ *         posts 		Post objects - get_posts
+ *         total 		Total posts found - for pagination
  *         message 		Message or null
+ *         success		true/false
  *
  */
 
