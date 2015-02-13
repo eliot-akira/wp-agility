@@ -8,9 +8,6 @@
  * reverseEvents
  * size
  * extendController
- *
- * $.outerHTML
- * $.isEmpty
  * 
  */
 
@@ -105,40 +102,3 @@ util.extendController = function(object) {
 
 module.exports = util;
 
-
-/*---------------------------------------------
- *
- * jQuery utility functions
- *
- */
-
-// Get element including wrapping tag
-window.jQuery.fn.outerHTML = function(s) {
-  if (s) {
-    return this.before(s).remove();
-  } else {
-    var doc = this[0] ? this[0].ownerDocument : document;
-    return jQuery('<div>', doc).append(this.eq(0).clone()).html();
-  }
-};
-
-window.jQuery.isEmpty = function( data ) {
-
-  if(typeof(data) == 'number' || typeof(data) == 'boolean') {
-    return false;
-  }
-  if(typeof(data) == 'undefined' || data === null) {
-    return true;
-  }
-  if(typeof(data.length) != 'undefined') {
-    return data.length == 0;
-  }
-
-  var count = 0;
-  for(var i in data) {
-    if(data.hasOwnProperty(i)) {
-      count ++;
-    }
-  }
-  return count == 0;
-};

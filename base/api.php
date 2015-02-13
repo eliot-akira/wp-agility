@@ -8,10 +8,18 @@ include('util/log.php');
 
 // Public API
 
+new Agility;
+
 class Agility {
 
 	public static $state;
-	public static $actions;
+  public static $actions;
+  public static $action_prefix;
+
+  function __construct() {
+    self::$action_prefix = 'agility_';
+  }
+
 
 	public static function register( $actions ) {
 		return Agility_Register::register( $actions );

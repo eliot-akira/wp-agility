@@ -22,11 +22,11 @@ class Agility_Action_Send_Email {
 
 		Agility::register( array(
 			array(
-				'action' => 'agility_send_email',
+				'action' => 'send_email',
 				'function' => array($this, 'send_email')
 			),
 			array(
-				'action' => 'agility_send_emails',
+				'action' => 'send_emails',
 				'function' => array($this, 'send_email')
 			)
 		));

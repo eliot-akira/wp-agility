@@ -1,9 +1,7 @@
-define(['libs/agility'],function($$){
-  window.console = window.console || { log: function(); }; // oh well.. JIC!
-/*
-   [MIT licensed](http://en.wikipedia.org/wiki/MIT_License)
-*/
+
+
 // custom agilityjs adapter for localstorage
+
 (function($$, console) {
   'use strict';
 
@@ -40,5 +38,3 @@ define(['libs/agility'],function($$){
   };
 
 })(window.agility, window.console);
-
-});

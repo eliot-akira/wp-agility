@@ -29,7 +29,7 @@ class Agility_Register {
 
 		Agility::$actions[ $action['action'] ] = $action; // Store all actions
 
-		$action_name = $action['action'];
+		$action_name = Agility::$action_prefix . $action['action'];
 		$function = $action['function'];
 
 		// Logged-in users

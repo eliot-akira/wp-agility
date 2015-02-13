@@ -3,9 +3,9 @@
  *
  * Controller
  *
- *  Default controllers, i.e. event handlers. Event handlers that start
- *  with '_' are of internal use only, and take precedence over any other
- *  handler without that prefix. See: trigger()
+ * Default controllers, i.e. event handlers. Event handlers that start
+ * with '_' are of internal use only, and take precedence over any other
+ * handler without that prefix. See: trigger()
  *
  */
 
@@ -25,14 +25,14 @@ module.exports = {
     // @extend Only if using style attribute
 
     if (this.view.style) {
-      var objClass = 'agility_' + this._id;
-      $('head #'+objClass, window.document).remove();
+      var objId = 'agility_' + this._id;
+      $('head #'+objId, window.document).remove();
     }
 
     // destroy any appended agility objects
     this._container.empty();
 
-    // destroy self
+    // destroy self in DOM, removing all events
     this.view.$().remove();
   },
 

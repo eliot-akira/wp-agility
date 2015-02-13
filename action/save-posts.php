@@ -22,11 +22,11 @@ class Agility_Action_Save_Posts {
 
 		Agility::register( array(
 			array(
-				'action' => 'agility_save_posts',
+				'action' => 'save_posts',
 				'function' => array($this, 'save_posts')
 			),
 			array(
-				'action' => 'agility_save_post', // Only one post
+				'action' => 'save_post', // Only one post
 				'function' => array($this, 'save_posts')
 			),
 		));

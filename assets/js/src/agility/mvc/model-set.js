@@ -9,12 +9,20 @@
 module.exports = function set( arg, params, third ) {
 
   var self = this;
+  var attr;
   var modified = []; // list of modified model attributes
   var previous = {}; // list of previous values
 
   // Set individual model property: model.set( prop, value )
   if ( typeof arg === 'string' && params ) {
-    arg = { arg: params };
+
+    attr = arg;
+    arg = {};
+    if ( typeof params === 'object' )
+      arg[attr] = $.extend({}, params);
+    else
+      arg[attr] = params;
+
     params = third || {};
   }
 

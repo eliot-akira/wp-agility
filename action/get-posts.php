@@ -25,11 +25,11 @@ class Agility_Action_Get_Posts {
 
 		Agility::register( array(
 			array(
-				'action' => 'agility_get_posts',
+				'action' => 'get_posts',
 				'function' => array($this, 'get_posts')
 			),
 			array(
-				'action' => 'agility_get_post',
+				'action' => 'get_post',
 				'function' => array($this, 'get_posts') // Same but return only one
 			),
 		));
@@ -59,13 +59,11 @@ class Agility_Action_Get_Posts {
 	}
 
 
-
-
 	public static function prepare_query( $request ) {
 
 		$defaults = array(
 			'post_type' => 'post',
-			'posts_per_page' => -1
+			'posts_per_page' => ( Agility::get_action() == 'get_post' ) ? 1 : -1
 		);
 
 		$query = is_array($request) ? array_merge($defaults, $request) : $defaults;
@@ -87,6 +85,9 @@ class Agility_Action_Get_Posts {
 			'url',
 			'id'
 		);
+
+    if ( Agility::get_action() == 'get_post' )
+      $defaults[] = 'content';
 
 		$fields = array_merge($defaults, $fields);
 		return $fields;

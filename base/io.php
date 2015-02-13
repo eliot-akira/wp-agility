@@ -65,7 +65,17 @@ class Agility_IO {
 
 
 	public static function get_action() {
-		return isset($_POST['action']) ? $_POST['action'] : null;
+
+    if (!isset($_POST['action'])) return null;
+
+    $action_name = $_POST['action'];
+    $prefix_length = strlen(Agility::$action_prefix);
+
+    // Remove prefix
+    if (strlen($action_name)>$prefix_length)
+      $action_name = substr( $action_name, strlen(Agility::$action_prefix) );
+
+		return $action_name;
 	}
 
 	public static function get_action_config() {

@@ -5,6 +5,8 @@
  *
  */
 
+var $util = require('../util/jquery.util');
+
 module.exports = {
 
   /*---------------------------------------------
@@ -80,40 +82,3 @@ module.exports = {
 
 };
 
-$.isEmpty = function( mixed_var ) {
-
-  // Empty: null, undefined, '', [], {}
-  // Not empty: 0, true, false
-  // What about jQuery object?
-
-  var undef, key, i, len;
-  var emptyValues = [undef, null, ''];
-
-  for (i = 0, len = emptyValues.length; i < len; i++) {
-    if (mixed_var === emptyValues[i]) {
-      return true;
-    }
-  }
-
-  if (typeof mixed_var === 'object') {
-    for (key in mixed_var) {
-      // Inherited properties count?
-      // if (mixed_var.hasOwnProperty(key)) {
-        return false;
-      // }
-    }
-    return true;
-  }
-
-  return false;
-};
-
-
-// Validate e-mail
-$.isEmail = function( email ) {
-
-  if ( $.isEmpty( email ) ) return false;
-
-  var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-  return regex.test(email);
-};

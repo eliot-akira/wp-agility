@@ -2,6 +2,8 @@
 /*---------------------------------------------
  *
  * Extended shortcuts
+ * 
+ * replace, child, children, load
  *
  */
 
@@ -10,11 +12,11 @@ var $ = require('jquery');
 module.exports = {
 
   get : function( arg ) {
-    this.model.get( arg );
+    return this.model.get( arg );
   },
 
   set : function( arg, params, third ) {
-    this.model.set( arg, params, third  );
+    return this.model.set( arg, params, third  );
   },
 
   replace: function( obj, selector ){
@@ -59,7 +61,6 @@ module.exports = {
       if ( self.child(index) ) {
         self.child(index).model.set( model );
       } else {
-        // $$ not defined yet?
         self.append( $$( proto, model ), selector );
       }
     });

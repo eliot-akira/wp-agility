@@ -22,11 +22,11 @@ class Agility_Action_Get_Users {
 
 		Agility::register( array(
 			array(
-				'action' => 'agility_get_users',
+				'action' => 'get_users',
 				'function' => array($this, 'get_users')
 			),
 			array(
-				'action' => 'agility_get_user',
+				'action' => 'get_user',
 				'function' => array($this, 'get_user')
 			),
 		));
@@ -37,12 +37,18 @@ class Agility_Action_Get_Users {
 
 		$request = Agility::request();
 
-		if ( isset($request['meta']) ) {
-			$user_meta = $request['meta'];
-			unset($request['meta']);
+		if ( isset($request['fields']) ) {
+			$user_meta = $request['fields'];
+			unset($request['fields']);
 		} else {
 			$user_meta = array();
 		}
+
+    // Alias
+    if (isset($request['count'])) {
+      $request['number'] = $request['count'];
+      unset($request['count']);
+    }
 
 		$users = get_users( $request );
 
@@ -64,18 +70,18 @@ class Agility_Action_Get_Users {
 
 			$data = array(
 				'id' => $user->ID,
+        'name' => $user->display_name,
 				'login' => $user->user_login,
-				'nicename' => $user->user_nicename,
 				'email' => $user->user_email,
 				'url' => $user->user_url,
 				'registered' => $user->user_registered,
-				'display_name' => $user->display_name,
 				'firstname' => $user->user_firstname,
 				'lastname' => $user->user_lastname,
 				'description' => $user->description,
+        // 'nicename' => $user->user_nicename,
 			);
 
-			// What about user meta fields?
+			// User meta fields
 			if ( $user_meta !== array() ) {
 				foreach ($user_meta as $meta) {
 					$data[$meta] = get_user_meta( $user->ID, $meta );

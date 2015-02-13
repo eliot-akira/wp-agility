@@ -18,11 +18,11 @@ class Agility_Action_Login {
 
 		Agility::register( array(
 			array(
-				'action' => 'agility_login',
+				'action' => 'login',
 				'function' => array($this, 'login')
 			),
 			array(
-				'action' => 'agility_register',
+				'action' => 'register',
 				'params' => array(
 					'username','password','key','email'
 				),

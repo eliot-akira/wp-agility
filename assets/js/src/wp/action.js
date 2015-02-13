@@ -30,7 +30,7 @@ module.exports = $.extend( window.wp.action || {}, {
     var type = 'posts';
 
     // For other content types: get_user, get_taxonomy, ...
-    var nonPostTypes = [ 'user', 'users', 'taxonomy', 'field', 'fields' ];
+    var otherTypes = [ 'post', 'user', 'users', 'taxonomy', 'field', 'fields' ];
 
     // Create array of arguments
     var args = Array.prototype.slice.call(arguments, 0);
@@ -47,7 +47,7 @@ module.exports = $.extend( window.wp.action || {}, {
     success = args[1] || {};
     error = args[2] || {};
 
-    if ( typeof request.type !== 'undefined' && $.inArray(request.type, nonPostTypes) > -1 ) {
+    if ( typeof request.type !== 'undefined' && $.inArray(request.type, otherTypes) > -1 ) {
       type = request.type;
       delete request.type;
     }

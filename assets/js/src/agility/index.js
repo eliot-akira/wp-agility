@@ -1,6 +1,6 @@
 /**
  * 
- * Agility.js - v0.2.2
+ * Agility.js - v0.2.3
  * 
  * Forked and extended from: Agility.js 0.1.3 by Artur B. Adib - http://agilityjs.com
  * 
@@ -13,6 +13,7 @@
  * Extended features
  * - Only render changed model properties
  * - Form helpers
+ * - Numerous improvements to be documented
  * 
  */
 
@@ -32,6 +33,7 @@
       agility, // Main agility object builder
 
       util             = require('./util/util'),         // Internal utility functions
+      $util            = require('./util/jquery.util'), // jQuery utility functions
       shim             = require('./util/object-shim'),  // Object.create and getPrototypeOf
       timed            = require('./util/timed'),        // Timed functions
       defaultPrototype = require('./prototype/index'),   // Default object prototype
@@ -86,7 +88,13 @@
     object._parent = null;
     object._events.data = {}; // event bindings will happen below
     object._container.children = {};
-    object.view.$root = $(); // empty jQuery object
+    
+    if ( prototype.view.$root instanceof jQuery && prototype._template ) {
+      // prototype $root exists: clone its content
+      object.view.$root = $( prototype.view.$root.outerHTML()  );
+    } else {
+      object.view.$root = $(); // empty jQuery object
+    }
 
 
     // Clone own properties
@@ -126,6 +134,7 @@
           object.view.format = $root.outerHTML();
           // Assign root to existing DOM element
           object.view.$root = $root;
+          
           object._template = true;
         }
 

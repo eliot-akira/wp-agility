@@ -1,6 +1,6 @@
 # WP-Agility
 
-This plugin provides a JavaScript framework to build an interactive frontend user interface with WordPress. It's backed by a PHP component for AJAX actions.
+This plugin provides a JavaScript framework for building an interactive user interface with WordPress. It's backed by a PHP component for performing AJAX actions.
 
 ## Features
 
@@ -8,91 +8,69 @@ This plugin provides a JavaScript framework to build an interactive frontend use
 
 - WordPress AJAX interface - Easy way to get and save content in the database, such as posts, fields, users. 
 
-## Example
+## Examples
 
-Objects are created by the factory function $$.
+#### Get a post
 
-
-
-
-They encapsulate the model, view, and events.
-
-
-
-
-
-An object can contain child objects. and can also be used as a prototype to create other objects.
-
-#### Container object
+Start with an HTML structure.
 
 ```
-var app = $$();
-
-$$.document.append(app, '#app-view');
+<section id="single-post">
+  <h4 data-bind="title"></h4>
+  <div data-bind="html=content"></div>
+</section>
 ```
 
-#### Model/view binding syntax
+Use the $$ factory function to create an object. If you pass an ID, it will use the element content as the view template.
 
-View must have one root element.
-
-```
-var singleUser = $$('<li><span data-bind="name"/> - <span data-bind="email"/></li>');
+```javascript
+var singlePost = $$('#single-post');
 ```
 
-#### From template
+Get a post and set it as the data model.
 
-```
-var singleUser = $$('#tmpl-single-user');
-```
-
-#### Inherit from prototype
-
-```
-var userOne = $$(singleUser, { name: 'Me', email: 'me@example.com'});
-var userTwo = $$(singleUser, { name: 'You', email: 'you@example.com'});
-```
-
-#### Collection
-
-A collection is just an object that contains child objects.
-
-```
-var usersList = $$({
-  view: '<ul>',
-  events: {
-    'parent:append' : function() {
-      wp.action
-        .get({ type: 'users', orderby: 'id' })
-        .done( function(users) {
-          usersList.loadModels( singleUser, users );
-        });
-    }
-  }
-});
-
-app.append( usersList );
-```
-
-When this object is appended to the main container, it will load a list of users from the server.
-
-## Action
-
-Get and save data from WordPress backend.
-
-```
-var postList = $$('<ul>');
-
-var singlePostClass = $$('<li data-bind="title">');
-
+```javascript
 wp.action
-  .get({
-    post_type : 'post',
-    posts_per_page : 5
-  })
-  .done( function( posts ) {
-    $.each(posts, function(post){
-      var singlePost = $$( singlePostClass, post );
-      postList.append( singlePost );
+  .get({ type: 'post' })
+  .done(function(post){
+    singlePost.set( post );
+  });
+```
+
+That's it. The view will be automatically rendered.
+
+#### Get a list of users
+
+Create a template.
+
+```
+<ul id="user-list">
+  <li data-bind="name"></li>
+</ul>
+```
+
+Create an object for the user list, and another one to use as prototype for a single user. Then we empty the element content of the user list.
+
+
+```javascript
+var userList = $$('#user-list');
+var userPrototype = $$('#user-list li');
+
+userList.$view.empty();
+```
+
+Get a list of users. When the reply is received, create a new object for each user, based on the prototype defined above, and append it to the user list.
+
+```javascript
+wp.action
+  .get({ type: 'users', orderby: 'name' })
+  .done(function(users){
+
+    users.forEach(function( userModel ){
+
+      var user = $$( userPrototype, userModel );
+      userList.append( user );
     });
   });
 ```
+
