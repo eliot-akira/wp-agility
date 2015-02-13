@@ -1,17 +1,34 @@
 # WP-Agility
 
-The core feature is based on [Agility.js](http://agilityjs.com). It provides a simple way to organize frontend code into objects, with data-binding between models and views, as well as a basic event system. The WordPress AJAX interface is based on an earlier incarnation called Ajaxio.
+This plugin provides a JavaScript framework to build an interactive frontend user interface with WordPress. It's backed by a PHP component for AJAX actions.
 
-## Main
+## Features
 
-Objects are created by the factory function $$.  They encapsulate model/view/events, and can be used as a prototype to create other objects.
+- [Agility.js](http://agilityjs.com), forked and extended - Organize the frontend into objects, with data-binding between models and views, as well as an event system.
+
+- WordPress AJAX interface - Easy way to get and save content in the database, such as posts, fields, users. 
+
+## Example
+
+Objects are created by the factory function $$.
+
+
+
+
+They encapsulate the model, view, and events.
+
+
+
+
+
+An object can contain child objects. and can also be used as a prototype to create other objects.
 
 #### Container object
 
 ```
 var app = $$();
 
-$$.document.append(app);
+$$.document.append(app, '#app-view');
 ```
 
 #### Model/view binding syntax

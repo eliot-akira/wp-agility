@@ -9,6 +9,14 @@ var $ = require('jquery');
 
 module.exports = {
 
+  get : function( arg ) {
+    this.model.get( arg );
+  },
+
+  set : function( arg, params, third ) {
+    this.model.set( arg, params, third  );
+  },
+
   replace: function( obj, selector ){
     if ( typeof selector === 'string' ) {
       this.view.$(selector).html('');
