@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP-Agility
 Version: 0.2.5
-Description: Frontend MVC objects with data-bind, events and WordPress AJAX interface
+Description: Frontend MVC library with data-bind, events, and WordPress AJAX interface
 */
 
 include('base/api.php');
