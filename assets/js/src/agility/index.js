@@ -1,6 +1,6 @@
 /**
  * 
- * Agility.js - v0.2.3
+ * Agility.js - v0.2.4
  * 
  * Forked and extended from: Agility.js 0.1.3 by Artur B. Adib - http://agilityjs.com
  * 
@@ -81,6 +81,7 @@
     object.controller = Object.create(prototype.controller);
     object._container = Object.create(prototype._container);
     object._events = Object.create(prototype._events);
+    object.form = Object.create(prototype.form);
 
 
     // Instance properties, i.e. not inherited

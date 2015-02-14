@@ -37,7 +37,7 @@ class Agility_Action_Save_Posts {
 
 		$request = Agility::request();
 
-		if ( Agility::get_action() == 'agility_save_post' ) {
+		if ( Agility::get_action() == 'save_post' ) {
 			$request = array($request); // Just one post
 		}
 
@@ -72,7 +72,7 @@ class Agility_Action_Save_Posts {
 
 			$fields = isset($post['fields']) ? $post['fields'] : array();
 
-			foreach ($post as $key => $value) {
+			foreach ( $post as $key => $value ) {
 
 				if ( isset($translate[$key]) ) {
 					$post[ $translate[$key] ] = $value;

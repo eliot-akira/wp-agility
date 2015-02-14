@@ -19,6 +19,10 @@ module.exports = {
     return this.model.set( arg, params, third  );
   },
 
+  invalid : function() {
+    return this.model.invalid();
+  },
+
   replace: function( obj, selector ){
     if ( typeof selector === 'string' ) {
       this.view.$(selector).html('');
