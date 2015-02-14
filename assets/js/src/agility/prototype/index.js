@@ -27,4 +27,4 @@ var $ = require('jquery'),
     extend = require('./extend'),
     form = require('./form');
 
-module.exports = $.extend(true, defaultPrototype, shortcuts, extend, form);
+module.exports = $.extend(defaultPrototype, shortcuts, extend, form);
