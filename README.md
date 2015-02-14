@@ -19,7 +19,7 @@ Start with an HTML structure.
 </section>
 ```
 
-Use the factory function `$$` to create an object. If you pass an elemtn ID, it will use its content as the view template.
+Use the factory function `$$` to create an object. If you pass an element ID, it will use its content as the view template.
 
 ```javascript
 var singlePost = $$('#single-post');
@@ -30,7 +30,7 @@ Get a post and set it as the data model.
 ```javascript
 wp.action
   .get({ type: 'post' })
-  .done(function(post){
+  .done( function(post) {
     singlePost.set( post );
   });
 ```
@@ -65,8 +65,8 @@ Get a list of users.
 ```javascript
 wp.action
   .get({ type: 'users', orderby: 'name' })
-  .done(function(users){
-    users.forEach(function( userModel ){
+  .done( function(users) {
+    users.forEach( function( userModel ) {
       var user = $$( userPrototype, userModel );
       userList.append( user );
     });
@@ -77,14 +77,12 @@ For each user, create a new object based on the prototype, and append it to the 
 
 #### Frontend post form
 
-The template
+The input form
 
 ```
 <form id="post-form">
-  <label for="title">Title</label><br>
-  <input type="text" name="title" data-bind="title"><br>
-  <label for="content">Content</label><br>
-  <textarea name="content" data-bind="content"></textarea><br>
+  <input type="text" data-bind="title" placeholder="Title"><br>
+  <textarea data-bind="content" placeholder="Post content"></textarea><br>
   <button type="submit">Save</button>
 </form>
 <div id="status"></div>
@@ -108,12 +106,13 @@ var postForm = $$({
   events : {
     'submit' : function() {
 
+      // Validate fields based on this.required
       var invalid = this.form.invalid();
-
       if ( invalid.length ) {
         return this.invalidFields( invalid );
       }
 
+      // Save the post
       wp.action
         .save( this.model.get() )
         .done( this.success )
