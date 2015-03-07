@@ -1,9 +1,11 @@
 <?php 
 /*
 Plugin Name: WP-Agility
-Version: 0.2.5
+Version: 0.3.0
 Description: Frontend MVC library with data-bind, events, and WordPress AJAX interface
 */
+
+define('WP_AGILITY_VERSION', '0.3.0');
 
 include('base/api.php');
 include('action/get-posts.php');

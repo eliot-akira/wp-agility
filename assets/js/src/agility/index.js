@@ -1,6 +1,6 @@
 /**
  * 
- * Agility.js - v0.2.7
+ * Agility.js - v0.3.0
  * 
  * Forked and extended from: Agility.js 0.1.3 by Artur B. Adib - http://agilityjs.com
  * 

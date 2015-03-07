@@ -24,7 +24,7 @@ class Agility_Enqueue {
 
 	function include_scripts() {
 
-		self::$state['version'] = '0.2.2';
+		self::$state['version'] = WP_AGILITY_VERSION;
 		self::$state['js'] = 'assets/js/wp-agility.min.js';
 
 		self::$state['url'] = trailingslashit( dirname(dirname(__FILE__)) ); // One folder above
