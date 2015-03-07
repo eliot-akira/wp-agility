@@ -24,7 +24,6 @@ module.exports = function bindings() {
         // Normal element attributes
         node.attr(attrPair.attr, self.model.get(attrPair.attrVar));
       }
-
     };
   };
 
@@ -45,121 +44,118 @@ module.exports = function bindings() {
     }; // bindAttributesOneWay()
     
 
-    // <input type="checkbox">: 2-way binding
+    if ( bindData.key ) {
 
-    if ($node.is('input:checkbox')) {
-      // Model --> DOM
-      self.bind('_change:'+bindData.key, function(){
-        $node.prop("checked", self.model.get(bindData.key)); // this won't fire a DOM 'change' event, saving us from an infinite event loop (Model <--> DOM)
-      });            
-      // DOM --> Model
-      $node.change(function(){
-        var obj = {};
-        obj[bindData.key] = $(this).prop("checked");
-        self.model.set(obj); // not silent as user might be listening to change events
-      });
-      // 1-way attribute binding
-      bindAttributesOneWay();
-    }
-    
-    // <select>: 2-way binding
+      /*---------------------------------------------
+       *
+       * Input types
+       *
+       */
 
-    else if ($node.is('select')) {
-      // Model --> DOM
-      self.bind('_change:'+bindData.key, function(){
-        var nodeName = $node.attr('name');
-        var modelValue = self.model.get(bindData.key);
-        $node.val(modelValue);
-      });            
-      // DOM --> Model
-      $node.change(function(){
-        var obj = {};
-        obj[bindData.key] = $node.val();
-        self.model.set(obj); // not silent as user might be listening to change events
-      });
-      // 1-way attribute binding
-      bindAttributesOneWay();
-    }
-    
-    // <input type="radio">: 2-way binding
+      // <input type="checkbox">: 2-way binding
 
-    else if ($node.is('input:radio')) {
+      if ($node.is('input:checkbox')) {
+        // Model --> DOM
+        self.bind('_change:'+bindData.key, function(){
+          $node.prop("checked", self.model.get(bindData.key)); // this won't fire a DOM 'change' event, saving us from an infinite event loop (Model <--> DOM)
+        });            
+        // DOM --> Model
+        $node.change(function(){
+          var obj = {};
+          obj[bindData.key] = $(this).prop("checked");
+          self.model.set(obj); // not silent as user might be listening to change events
+        });
+      }
+      
+      // <select>: 2-way binding
 
-      // Model --> DOM
-      self.bind('_change:'+bindData.key, function(){
-        var nodeName = $node.attr('name');
-        var modelValue = self.model.get(bindData.key);
-
-          // $node.siblings('input[name="'+nodeName+'"]').filter('[value="'+modelValue+'"]').prop("checked", true);
-
-          // @pull #110 Binding for radio buttons
-          // They're not always siblings, so start from $root
-          self.view.$root.find('input[name="'+nodeName+'"]')
-            .filter('[value="'+modelValue+'"]')
-            .prop("checked", true);
-            // this won't fire a DOM 'change' event, saving us from
-            // an infinite event loop (Model <--> DOM)
-      });            
-
-      // DOM --> Model
-
-      $node.change(function(){
-        if (!$node.prop("checked")) return; // only handles check=true events
-        var obj = {};
-        obj[bindData.key] = $node.val();
-        self.model.set(obj); // not silent as user might be listening to change events
-      });
-      // 1-way attribute binding
-      bindAttributesOneWay();
-    }
-    
-    // <input type="search"> (model is updated after every keypress event)
-
-    else if ($node.is('input[type="search"]')) {
-
-      // Model --> DOM
-      self.bind('_change:'+bindData.key, function(){
-        // this won't fire a DOM 'change' event, saving us from
-        // an infinite event loop (Model <--> DOM)
-        $node.val(self.model.get(bindData.key));
-      });
-
-      // Model <-- DOM
-      $node.keypress(function(){
-        // Without timeout $node.val() misses the last entered character
-        setTimeout(function(){
+      else if ($node.is('select')) {
+        // Model --> DOM
+        self.bind('_change:'+bindData.key, function(){
+          var nodeName = $node.attr('name');
+          var modelValue = self.model.get(bindData.key);
+          $node.val(modelValue);
+        });            
+        // DOM --> Model
+        $node.change(function(){
           var obj = {};
           obj[bindData.key] = $node.val();
           self.model.set(obj); // not silent as user might be listening to change events
-        }, 50);
-      });
-      // 1-way attribute binding
-      bindAttributesOneWay();
-    }
+        });
+      }
+      
+      // <input type="radio">: 2-way binding
 
-    // <input type="text">, <input>, and <textarea>: 2-way binding
+      else if ($node.is('input:radio')) {
 
-    else if ($node.is('input:text, input[type!="search"], textarea')) {
-      // Model --> DOM
-      self.bind('_change:'+bindData.key, function(){
-        // this won't fire a DOM 'change' event, saving us from
-        // an infinite event loop (Model <--> DOM)
-        $node.val(self.model.get(bindData.key));
-      });            
-      // Model <-- DOM
-      $node.change(function(){
-        var obj = {};
-        obj[bindData.key] = $(this).val();
-        self.model.set(obj); // not silent as user might be listening to change events
-      });
-      // 1-way attribute binding
-      bindAttributesOneWay();
-    }
-    
-    // all other <tag>s: 1-way binding, only Model -> DOM
+        // Model --> DOM
+        self.bind('_change:'+bindData.key, function(){
+          var nodeName = $node.attr('name');
+          var modelValue = self.model.get(bindData.key);
 
-    else {
-      if (bindData.key) {
+            // $node.siblings('input[name="'+nodeName+'"]').filter('[value="'+modelValue+'"]').prop("checked", true);
+
+            // @pull #110 Binding for radio buttons
+            // They're not always siblings, so start from $root
+            self.view.$root.find('input[name="'+nodeName+'"]')
+              .filter('[value="'+modelValue+'"]')
+              .prop("checked", true);
+              // this won't fire a DOM 'change' event, saving us from
+              // an infinite event loop (Model <--> DOM)
+        });            
+
+        // DOM --> Model
+
+        $node.change(function(){
+          if (!$node.prop("checked")) return; // only handles check=true events
+          var obj = {};
+          obj[bindData.key] = $node.val();
+          self.model.set(obj); // not silent as user might be listening to change events
+        });
+      }
+      
+      // <input type="search"> (model is updated after every keypress event)
+
+      else if ($node.is('input[type="search"]')) {
+
+        // Model --> DOM
+        self.bind('_change:'+bindData.key, function(){
+          // this won't fire a DOM 'change' event, saving us from
+          // an infinite event loop (Model <--> DOM)
+          $node.val(self.model.get(bindData.key));
+        });
+
+        // Model <-- DOM
+        $node.keypress(function(){
+          // Without timeout $node.val() misses the last entered character
+          setTimeout(function(){
+            var obj = {};
+            obj[bindData.key] = $node.val();
+            self.model.set(obj); // not silent as user might be listening to change events
+          }, 50);
+        });
+      }
+
+      // <input type="text">, <input>, and <textarea>: 2-way binding
+
+      else if ($node.is('input:text, input[type!="search"], textarea')) {
+        // Model --> DOM
+        self.bind('_change:'+bindData.key, function(){
+          // this won't fire a DOM 'change' event, saving us from
+          // an infinite event loop (Model <--> DOM)
+          $node.val(self.model.get(bindData.key));
+        });            
+        // Model <-- DOM
+        $node.change(function(){
+          var obj = {};
+          obj[bindData.key] = $(this).val();
+          self.model.set(obj); // not silent as user might be listening to change events
+        });
+      }
+      
+      // all other <tag>s: only Model -> DOM text
+
+      else {
         self.bind('_change:'+bindData.key, function(){
           var key = self.model.get(bindData.key);
           if (key || key===0) {
@@ -169,11 +165,32 @@ module.exports = function bindings() {
           }
         });
       }
-      bindAttributesOneWay();
     }
 
-    // Store binding map for later reference
+    // Model -> DOM attributes
+    bindAttributesOneWay();
 
+    // Custom bindings
+    bindData.attr.forEach(function(pair, index){
+      // Keyup
+      if ( pair.attr === 'keyup' ) {
+        $node.keyup(function(){
+          // timeout to make sure to get last entered character
+          setTimeout(function(){
+            self.model.set( pair.attrVar, $node.val() ); // fires event
+          }, 50);
+        });        
+        self.bind('_change:'+pair.attrVar, function(){
+          $node.val( self.model.get( pair.attrVar ) );
+        });
+
+      // Visible
+      } else if ( pair.attr === 'visible' ) {
+
+      } 
+    });
+
+    // Store binding map for later reference
     self.$node[ bindData.key ] = $node; // Model property -> element
     self.key[ $node ] = bindData.key; // Element -> Model property
 

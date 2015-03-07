@@ -1,19 +1,18 @@
 /**
  * 
- * Agility.js - v0.2.5
+ * Agility.js - v0.2.7
  * 
  * Forked and extended from: Agility.js 0.1.3 by Artur B. Adib - http://agilityjs.com
- * 
- * Separated into CommonJS modules
  * 
  * Merged pull requests
  * - Support nested model properties
  * - Efficient handling of style
  * 
  * Extended features
+ * - CommonJS-style modules
  * - Only render changed model properties
  * - Form helpers
- * - Numerous improvements to be documented
+ * - Event manager
  * 
  */
 
@@ -33,10 +32,11 @@
       agility, // Main agility object builder
 
       util             = require('./util/util'),         // Internal utility functions
-      $util            = require('./util/jquery.util'), // jQuery utility functions
+      $util            = require('./util/jquery.util'),  // jQuery utility functions
       shim             = require('./util/object-shim'),  // Object.create and getPrototypeOf
       timed            = require('./util/timed'),        // Timed functions
       defaultPrototype = require('./prototype/index'),   // Default object prototype
+      eventify         = require('./util/eventify.js'),  // Event manager factory
       idCounter        = 0; // Global object counter
 
 
@@ -349,6 +349,9 @@
     if (typeof obj !== 'object') return false;
     return util.isAgility(obj);
   };
+
+  agility.eventify = eventify; // Event manager factory
+
 
 
   /*---------------------------------------------

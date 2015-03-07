@@ -31,6 +31,6 @@ module.exports = function get( arg ) {
     }
     return value;
   }
-
+console.log('Get',arg);
   throw 'agility.js: unknown argument for getter';
 };

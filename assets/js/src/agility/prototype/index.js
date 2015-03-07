@@ -20,7 +20,6 @@ var $ = require('jquery'),
       model: require('../mvc/model'),
       view: require('../mvc/view'),
       controller: require('../mvc/controller')
-
     },
 
     shortcuts = require('./shortcuts'),

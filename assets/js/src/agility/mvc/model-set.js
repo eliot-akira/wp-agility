@@ -14,7 +14,7 @@ module.exports = function set( arg, params, third ) {
   var previous = {}; // list of previous values
 
   // Set individual model property: model.set( prop, value )
-  if ( typeof arg === 'string' && params ) {
+  if ( typeof arg === 'string' ) {
 
     attr = arg;
     arg = {};
