@@ -14,7 +14,7 @@ module.exports = {
     // Clear the form
     clear : function() {
 
-      return this.$view.find(':input')
+      return this.$view.find(':input, textarea')
         .not(':button, :submit, :reset, :hidden').removeAttr('checked').removeAttr('selected')
         .not(':checkbox, :radio, select').val('');
     },
